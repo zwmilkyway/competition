@@ -18,7 +18,7 @@ train_data_y = train_data['label']
 #for i in range(0,len(test_data)):
 #    test_data.ix[i] = sp.binarize([test_data.ix[i]])
 
-gb = GradientBoostingClassifier(n_estimators=500)
+gb = GradientBoostingClassifier(n_estimators=700)
 
 gb.fit(train_data_x[:40000],train_data_y[:40000])
 #re_data = gb.predict(test_data)
