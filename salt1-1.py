@@ -9,20 +9,24 @@ test_path = "F:\\all\salt\\train\images"
 depth = pd.read_csv("F:\\all\salt\\depths.csv")
 
 cols = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','depth','label']
-train_data = pd.DataFrame(columns=cols)
+
 tmp_data = np.zeros(27,dtype=int)
 
 tmp_mat = np.zeros((105,105),dtype=int)
+
 #print tmp_data[26]
 
 files = os.listdir(train_path)
 for f in files:
     #print f
+    train_data = pd.DataFrame(columns=cols, data=np.random.randint(low=0, high=1, size=(10201, 27)))
     fileid = f.split('.png')
 #    print fileid[0]
     dep = depth[depth['id']==fileid[0]]
     train_png = train_path+'\\'+f
     train_mask = mask_path+'\\'+f
+    csv_name = 'F:\\all\\salt\\train\\csv\\' + fileid[0] + '.csv'
+    print csv_name
     img = Image.open(train_png)
     img = img.convert('L')
     mat = np.array(img)
@@ -67,13 +71,18 @@ for f in files:
             tmp_data[24] = tmp_mat[i + 2][j + 2]
             tmp_data[25] = dep['z']
             tmp_data[26] = label[i-2][j-2]
-            d = pd.DataFrame(tmp_data)
-            print tmp_data
-            print d
-            train_data.append(d)
 
-    print train_data
-    train_data.to_csv("F:\\all\salt\\train\\tmp.csv")
+            a = pd.Series(tmp_data,index=cols)
+            #a = a.transform()
+            #print tmp_data
+            #print a
+            train_data.ix[(i-2)*101+j-2] = a
+            print train_data
+
+    #print train_data
+
+    train_data.to_csv(csv_name)
+
             #train_data.ix[i*10+j].append("ddd")
 
 
